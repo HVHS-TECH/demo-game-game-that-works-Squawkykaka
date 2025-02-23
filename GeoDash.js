@@ -5,8 +5,8 @@
 /*******************************************************/
 console.log("%c t01_create_sprite", "color: blue;");
 
-const SCREEN_WIDTH = 400;
-const SCREEN_HEIGHT = 200;
+const SCREEN_WIDTH = 500;
+const SCREEN_HEIGHT = 500;
 const PLAYER_HEIGHT = 25;
 const PLAYER_WIDTH = 25;
 
