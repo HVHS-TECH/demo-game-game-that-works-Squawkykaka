@@ -6,7 +6,6 @@ let timer = 10
 let scoreGoal = 15
 
 let gameState = 0;
-let gameSetup=false
 
 let coinGroup;
 
