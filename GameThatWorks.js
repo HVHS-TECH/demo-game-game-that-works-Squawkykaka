@@ -3,9 +3,10 @@ let playersize = 50;
 let score = 0;
 
 let timer = 10
-let scoreGoal = 20
+let scoreGoal = 15
 
-let gameState = 1;
+let gameState = 0;
+let gameSetup=false
 
 let coinGroup;
 
@@ -16,8 +17,9 @@ function setup() {
     const cnv = new Canvas(SCREEN_WIDTH, SCREEN_HEIGHT)
     coinGroup = new Group()
     textSize(50)
+}
 
-    // setupGame(player, 100, 100)
+function setupGame() {
     player = new Sprite(500, 500, 50, 50)
 
     spawnCoins(scoreGoal)
@@ -48,6 +50,9 @@ function spawnCoins(amount) {
 
 function gameManager() {
     switch(gameState) {
+        case 0:
+            startScreen()
+            break;
         case 1:
             gameLoop()
             break;
@@ -58,6 +63,11 @@ function gameManager() {
             wonGame()
             break;
     }
+}
+
+function startScreen() {
+    background('purple')
+    text("Click the mouse to start", windowWidth/2, windowHeight/2)
 }
 
 function gameLoop() {
@@ -78,6 +88,7 @@ function lostGame() {
 
     text("You lost!", windowWidth/2, windowHeight/2)
     text("You got " + score + " points!", windowWidth/2, windowHeight/2+50)
+    text("Click the mouse to restart!", windowWidth/2, windowHeight/2+100)
 }
 
 function wonGame() {
@@ -86,4 +97,14 @@ function wonGame() {
 
     text("You won!!", windowWidth/2, windowHeight/2)
     text("You got " + score + " points!", windowWidth/2, windowHeight/2+50)
+    text("Click the mouse to restart!", windowWidth/2, windowHeight/2+100)
+}
+
+function mouseReleased() {
+    if ( gameState == 0 || gameState == 2 || gameState == 3) {
+        timer = 10
+        score = 0
+        setupGame()
+        gameState=1
+    }
 }
