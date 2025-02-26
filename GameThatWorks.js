@@ -39,7 +39,7 @@ function spawnCoins(amount) {
 
         // coin.update = () => {
         //     if(coin.life == 1) {
-        //         gameState=2
+        //         timer -= 4
         //     }
         // }
 
@@ -70,8 +70,6 @@ function gameLoop() {
     textAlign("left")
 
     background('blue')
-
-    // player.moveTowards(mouse, 0.05)
     
     text("Score: " + score, 50, 50)
     text("Timer: " + timer, 50, 100)
@@ -96,8 +94,12 @@ function endScreen() {
 
     text("You Died!", windowWidth/2, windowHeight/2)
     text("You got " + score + " points!", windowWidth/2, windowHeight/2+50)
-    // button = new Button("Hello", windowWidth, windowHeight-100)
     text("Click the mouse to restart!", windowWidth/2, windowHeight/2+100)
+
+
+    createButton("hello", 500, 500, ()=> {
+        gameState=1
+    })
 }
 
 function mouseReleased() {
@@ -127,36 +129,26 @@ function resetGame() {
 		let h = 100 - player.speed;
 		ellipse(0, 0, w, h);
 		pop();
-
-		// image(face, player.vel.x*2, player.vel.y*2);
 	};
 
     spawnCoins(1)
 }
-
-class Button {
-    constructor(text, x, y) {
-        this.x = x
-        this.y = y
-        this.text = text
-    }
-
-    get text() {
-        return this.text
-    }
+/**
+ * A function to spawn a button at the specified coords
+ * @param {string} text The text to display
+ * @param {x} x The x coord to spawn the button
+ * @param {y} y The x coord to spawn the button
+ * @param {Function} func The function run every frame
+ */
+function createButton(text, x, y, func) {
+    button = new Sprite(x, y)
+    button.text = text
+    button.height = textHeight(text)
+    button.width = textWidth(text)
     
-    draw() {
-        textAlign("center")
-        textWidth = textWidth(this.text)
-        textHeight = textHeight(this.text)
-
-        button = new Sprite(this.x, this.y, textWidth+8-4, textHeight+8-4)
-
-        button.draw = () => {
-            this.draw()
-        }
-
-        buttonGroup.add(button)
-        text(this.text, this.x, this.y)
+    button.update = () => {
+        func
     }
+
+    buttonGroup.add(button)
 }
