@@ -3,11 +3,11 @@ let playersize = 50;
 let score = 0;
 
 let timer = 10
-let scoreGoal = 15
 
 let gameState = 0;
 
 let coinGroup;
+let buttonGroup;
 
 function setup() {
     const SCREEN_WIDTH = windowWidth
@@ -15,6 +15,7 @@ function setup() {
 
     const cnv = new Canvas(SCREEN_WIDTH, SCREEN_HEIGHT)
     coinGroup = new Group()
+    buttonGroup = new Group()
     textSize(50)
 }
 
@@ -23,13 +24,10 @@ function draw() {
 
     if (frameCount % 60 == 0 && timer > 0) { // if the frameCount is divisible by 60, then a second has passed. it will stop at 0
         timer--;
-        spawnCoins(random(1))
     }
 
-    if(timer <= 0 && score < scoreGoal) {
+    if(timer <= 0) {
         gameState=2
-    } else if (score == scoreGoal) {
-        gameState=3
     }
 }
 
@@ -58,10 +56,7 @@ function gameManager() {
             gameLoop()
             break;
         case 2:
-            lostGame()
-            break;
-        case 3:
-            wonGame()
+            endScreen()
             break;
     }
 }
@@ -87,35 +82,26 @@ function gameLoop() {
         timer += 2
     })
 
-    if(random(0, 500) < 5) {
+    if (frameCount % 60 == 0 && timer > 0) { // if the frameCount is divisible by 60, then a second has passed. it will stop at 0
         spawnCoins(random(1))
     }
+
 }
 
-function lostGame() {
-    allSprites.remove()
-    textAlign("center")
-
-    background('red')
-
-    text("You lost!", windowWidth/2, windowHeight/2)
-    text("You got " + score + " points!", windowWidth/2, windowHeight/2+50)
-    text("Click the mouse to restart!", windowWidth/2, windowHeight/2+100)
-}
-
-function wonGame() {
+function endScreen() {
     allSprites.remove()
     textAlign("center")
 
     background('green')
 
-    text("You won!!", windowWidth/2, windowHeight/2)
+    text("You Died!", windowWidth/2, windowHeight/2)
     text("You got " + score + " points!", windowWidth/2, windowHeight/2+50)
+    // button = new Button("Hello", windowWidth, windowHeight-100)
     text("Click the mouse to restart!", windowWidth/2, windowHeight/2+100)
 }
 
 function mouseReleased() {
-    if ( gameState == 0 || gameState == 2 || gameState == 3) {
+    if ( gameState == 0 || gameState == 2) {
         resetGame()
     }
 }
@@ -146,4 +132,31 @@ function resetGame() {
 	};
 
     spawnCoins(1)
+}
+
+class Button {
+    constructor(text, x, y) {
+        this.x = x
+        this.y = y
+        this.text = text
+    }
+
+    get text() {
+        return this.text
+    }
+    
+    draw() {
+        textAlign("center")
+        textWidth = textWidth(this.text)
+        textHeight = textHeight(this.text)
+
+        button = new Sprite(this.x, this.y, textWidth+8-4, textHeight+8-4)
+
+        button.draw = () => {
+            this.draw()
+        }
+
+        buttonGroup.add(button)
+        text(this.text, this.x, this.y)
+    }
 }
