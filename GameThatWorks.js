@@ -20,7 +20,6 @@ function setup() {
 }
 
 function draw() {
-    mouse.cursor = 'default'
     gameManager()
 
     if (frameCount % 60 == 0 && timer > 0) { // if the frameCount is divisible by 60, then a second has passed. it will stop at 0
@@ -65,6 +64,7 @@ function gameManager() {
 function startScreen() {
     background('purple')
     text("Click the mouse to start", windowWidth/2, windowHeight/2)
+    timer=1
 }
 
 function gameLoop() {
