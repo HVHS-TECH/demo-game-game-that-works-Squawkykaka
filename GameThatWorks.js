@@ -87,6 +87,8 @@ function gameLoop() {
 }
 
 function endScreen() {
+    setup = false
+
     allSprites.remove()
     textAlign("center")
 
@@ -96,10 +98,12 @@ function endScreen() {
     text("You got " + score + " points!", windowWidth/2, windowHeight/2+50)
     text("Click the mouse to restart!", windowWidth/2, windowHeight/2+100)
 
-
-    createButton("hello", 500, 500, ()=> {
-        gameState=1
-    })
+    // if(setup==false) {
+    //     createNewButton("hello", 200, 200, ()=> {
+    //         console.log("hi")
+    //     })
+    //     setup=true
+    // }
 }
 
 function mouseReleased() {
@@ -133,20 +137,22 @@ function resetGame() {
 
     spawnCoins(1)
 }
+
 /**
  * A function to spawn a button at the specified coords
  * @param {string} text The text to display
  * @param {x} x The x coord to spawn the button
  * @param {y} y The x coord to spawn the button
- * @param {Function} func The function run every frame
+ * @param {Function} func The function run when clicked
  */
-function createButton(text, x, y, func) {
+function createNewButton(text, x, y, func) {
     button = new Sprite(x, y)
     button.text = text
-    button.height = textHeight(text)
-    button.width = textWidth(text)
+    console.log(textWidth(text))
+    button.height = 60
+    button.width = textWidth(text)+20
     
-    button.update = func
+    button.mousePressed = func
 
     buttonGroup.add(button)
 }
