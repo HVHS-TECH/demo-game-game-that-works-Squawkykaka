@@ -30,8 +30,8 @@ function draw() {
         timer--;
     }
 
-    if(timer <= 0) {
-        gameState=2
+    if (timer <= 0) {
+        gameState = 2
     }
 }
 
@@ -39,7 +39,7 @@ function spawnCoins(amount) {
     for (let i = 0; i < amount; i++) {
         coin = new Sprite(random(windowWidth), random(windowHeight), 20)
         coin.color = 'yellow'
-        coin.life=60*2
+        coin.life = 60 * 2
 
         coinGroup.add(coin)
     }
@@ -55,7 +55,7 @@ function spawnEnemys(amount) {
 }
 
 function gameManager() {
-    switch(gameState) {
+    switch (gameState) {
         case 0:
             startScreen()
             break;
@@ -69,16 +69,19 @@ function gameManager() {
 }
 
 function startScreen() {
+    textAlign('center')
     background('purple')
-    text("Click the mouse to start", windowWidth/2, windowHeight/2)
-    timer=1
+    text("Click the mouse to start", windowWidth / 2, windowHeight / 2)
+    createNewButton("Begin", windowWidth / 2, windowHeight / 2 + 50)
+
+    timer = 10000
 }
 
 function gameLoop() {
     textAlign("left")
 
-    background('blue')
-    
+    background('#453c3b')
+
     text("Score: " + score, 50, 50)
     text("Timer: " + timer, 50, 100)
 
@@ -89,14 +92,14 @@ function gameLoop() {
     })
 
     enemyGroup.collides(player, (enemy) => {
-        gameState=2
+        gameState = 2
     })
 
     if (frameCount % 60 == 0 && timer > 0) { // if the frameCount is divisible by 60, then a second has passed. it will stop at 0
         spawnCoins(1)
     }
 
-    if(random(0, 500) < 5) {
+    if (random(0, 500) < 5) {
         spawnEnemys(random(3))
     }
 
@@ -108,35 +111,35 @@ function endScreen() {
 
     background('green')
 
-    text("You Died!", windowWidth/2, windowHeight/2)
-    text("You got " + score + " points!", windowWidth/2, windowHeight/2+50)
-    text("Click the mouse to restart!", windowWidth/2, windowHeight/2+100)
+    text("You Died!", windowWidth / 2, windowHeight / 2)
+    text("You got " + score + " points!", windowWidth / 2, windowHeight / 2 + 50)
+    text("Click the mouse to restart!", windowWidth / 2, windowHeight / 2 + 100)
 
-    createNewButton("Begin Again", 200, 200)
+    createNewButton("Begin Again", windowWidth / 2, windowHeight / 2 + 150)
 }
 
 function resetGame() {
     timer = 10
     score = 0
-    gameState=1
+    gameState = 1
 
 
     player = new Sprite(500, 500)
 
-	player.update = () => {
-		player.moveTowards(mouse, 0.07);
-	};
-	
-	player.draw = () => {
-		fill(237, 205, 0);
+    player.update = () => {
+        player.moveTowards(mouse, 0.07);
+    };
 
-		push();
-		rotate(player.direction);
-		let w = 100 + player.speed;
-		let h = 100 - player.speed;
-		ellipse(0, 0, w, h);
-		pop();
-	};
+    player.draw = () => {
+        fill(237, 205, 0);
+
+        push();
+        rotate(player.direction);
+        let w = 100 + player.speed;
+        let h = 100 - player.speed;
+        ellipse(0, 0, w, h);
+        pop();
+    };
 
     spawnCoins(1)
 }
@@ -152,9 +155,9 @@ function createNewButton(text, x, y) {
     button.text = text
     button.height = 60
     button.color = 'white'
-    button.life=5
-    button.width = textWidth(text)+20
-    
+    button.life = 2
+    button.width = textWidth(text) + 20
+
     button.update = () => {
         if (button.mouse.pressing()) {
             resetGame()
