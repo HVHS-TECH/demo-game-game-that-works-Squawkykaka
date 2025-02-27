@@ -8,6 +8,8 @@ let gameState = 0;
 
 let coinGroup;
 let buttonGroup;
+let enemyGroup;
+
 
 function setup() {
     const SCREEN_WIDTH = windowWidth
@@ -16,6 +18,8 @@ function setup() {
     const cnv = new Canvas(SCREEN_WIDTH, SCREEN_HEIGHT)
     coinGroup = new Group()
     buttonGroup = new Group()
+    enemyGroup = new Group()
+
     textSize(50)
 }
 
@@ -37,13 +41,16 @@ function spawnCoins(amount) {
         coin.color = 'yellow'
         coin.life=60*2
 
-        // coin.update = () => {
-        //     if(coin.life == 1) {
-        //         timer -= 4
-        //     }
-        // }
-
         coinGroup.add(coin)
+    }
+}
+
+function spawnEnemys(amount) {
+    for (let i = 0; i < amount; i++) {
+        enemy = new Sprite(random(windowWidth), random(windowHeight), 30, 30)
+        enemy.color = 'red'
+
+        enemyGroup.add(enemy)
     }
 }
 
@@ -81,8 +88,16 @@ function gameLoop() {
         timer += 2
     })
 
+    enemyGroup.collides(player, (enemy) => {
+        gameState=2
+    })
+
     if (frameCount % 60 == 0 && timer > 0) { // if the frameCount is divisible by 60, then a second has passed. it will stop at 0
-        spawnCoins(random(1))
+        spawnCoins(1)
+    }
+
+    if(random(0, 500) < 5) {
+        spawnEnemys(random(3))
     }
 
 }
