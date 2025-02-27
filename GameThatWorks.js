@@ -146,9 +146,7 @@ function createButton(text, x, y, func) {
     button.height = textHeight(text)
     button.width = textWidth(text)
     
-    button.update = () => {
-        func
-    }
+    button.update = func
 
     buttonGroup.add(button)
 }
