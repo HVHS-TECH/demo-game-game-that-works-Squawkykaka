@@ -10,7 +10,6 @@ let coinGroup;
 let buttonGroup;
 let enemyGroup;
 
-
 function setup() {
     const SCREEN_WIDTH = windowWidth
     const SCREEN_HEIGHT = windowHeight
@@ -19,6 +18,8 @@ function setup() {
     coinGroup = new Group()
     buttonGroup = new Group()
     enemyGroup = new Group()
+
+    allSprites.overlaps(buttonGroup)
 
     textSize(50)
 }
@@ -72,19 +73,32 @@ function startScreen() {
     textAlign('center')
     background('purple')
     text("Click the mouse to start", windowWidth / 2, windowHeight / 2)
-    createNewButton("Begin", windowWidth / 2, windowHeight / 2 + 50)
+    createNewButton("Begin", windowWidth / 2, windowHeight / 2 + 50, () => {
+        resetGame()
+    })
 
     timer = 10000
 }
 
 function gameLoop() {
     textAlign("left")
-
     background('#453c3b')
 
-    text("Score: " + score, 50, 50)
-    text("Timer: " + timer, 50, 100)
+    handleCollisions()
 
+    text(`Score: ${score}\nTimer ${timer}`, 50, 50)
+
+    if (frameCount % 60 == 0 && timer > 0) { // if the frameCount is divisible by 60, then a second has passed. it will stop at 0
+        spawnCoins(1)
+    }
+
+    if (random() < 0.01) {
+        spawnEnemys(random(3))
+    }
+
+}
+
+function handleCollisions() {
     coinGroup.collides(player, (coin) => {
         coin.remove()
         score++;
@@ -94,15 +108,6 @@ function gameLoop() {
     enemyGroup.collides(player, (enemy) => {
         gameState = 2
     })
-
-    if (frameCount % 60 == 0 && timer > 0) { // if the frameCount is divisible by 60, then a second has passed. it will stop at 0
-        spawnCoins(1)
-    }
-
-    if (random(0, 500) < 5) {
-        spawnEnemys(random(3))
-    }
-
 }
 
 function endScreen() {
@@ -115,7 +120,9 @@ function endScreen() {
     text("You got " + score + " points!", windowWidth / 2, windowHeight / 2 + 50)
     text("Click the mouse to restart!", windowWidth / 2, windowHeight / 2 + 100)
 
-    createNewButton("Begin Again", windowWidth / 2, windowHeight / 2 + 150)
+    createNewButton("Begin Again", windowWidth / 2, windowHeight / 2 + 150, () => {
+        resetGame()
+    })
 }
 
 function resetGame() {
@@ -134,10 +141,7 @@ function resetGame() {
         fill(237, 205, 0);
 
         push();
-        rotate(player.direction);
-        let w = 100 + player.speed;
-        let h = 100 - player.speed;
-        ellipse(0, 0, w, h);
+        ellipse(0, 0, 70, 70);
         pop();
     };
 
@@ -149,8 +153,9 @@ function resetGame() {
  * @param {string} text The text to display
  * @param {x} x The x coord to spawn the button
  * @param {y} y The x coord to spawn the button
+ * @param {Function} func The function to run
  */
-function createNewButton(text, x, y) {
+function createNewButton(text, x, y, func) {
     button = new Sprite(x, y)
     button.text = text
     button.height = 60
@@ -160,7 +165,7 @@ function createNewButton(text, x, y) {
 
     button.update = () => {
         if (button.mouse.pressing()) {
-            resetGame()
+            func()
         }
     }
 
