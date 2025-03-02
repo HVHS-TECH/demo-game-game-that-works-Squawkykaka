@@ -105,7 +105,7 @@ function handleCollisions() {
         timer += 2
     })
 
-    enemyGroup.collides(player, (enemy) => {
+    enemyGroup.collides(player, () => {
         gameState = 2
     })
 }
