@@ -85,6 +85,7 @@ function gameLoop() {
     background('#453c3b')
 
     handleCollisions()
+    playerMovement()
 
     text(`Score: ${score}\nTimer ${timer}`, 50, 50)
 
@@ -96,6 +97,13 @@ function gameLoop() {
         spawnEnemys(random(3))
     }
 
+}
+
+function playerMovement() {
+    if (kb.released("f") && timer >= 10) {
+        player.position.x += 5
+        timer -= 10
+    }
 }
 
 function handleCollisions() {
